@@ -148,14 +148,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Killer.h" />
+    <ClInclude Include="Launcher.h" />
     <ClInclude Include="RedSpiderKiller.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="SecureDesktop.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Killer.cpp" />
+    <ClCompile Include="Launcher.cpp" />
     <ClCompile Include="RedSpiderKiller.cpp" />
+    <ClCompile Include="SecureDesktop.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -167,14 +171,10 @@
     <ResourceCompile Include="RedSpiderKiller.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\..\..\Desktop\EXIT.ico" />
-    <Image Include="..\..\..\..\Desktop\HIDE.ico" />
-    <Image Include="..\..\..\..\Desktop\hide.png" />
-    <Image Include="..\..\..\..\Desktop\SHOW.ico" />
-    <Image Include="..\..\..\..\Desktop\view.png" />
     <Image Include="EXIT.ico" />
     <Image Include="HIDE.ico" />
     <Image Include="RedSpiderKiller.ico" />
+    <Image Include="SECURE.ico" />
     <Image Include="SHOW.ico" />
     <Image Include="small.ico" />
   </ItemGroup>
