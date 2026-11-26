@@ -64,8 +64,6 @@ public:
 	void CloseAgentWindow();
 	// 已识别到的学生端名称，多个用「、」连接，未识别时为空
 	std::wstring GetAgentNames() const;
-	// 自动识别到的学生端可执行文件完整路径，未识别时为空字符串
-	const std::wstring& GetFilePath() const;
 
 private:
 	// 一款学生端

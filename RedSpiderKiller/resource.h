@@ -2,18 +2,15 @@
 // Microsoft Visual C++ 生成的包含文件。
 // 供 RedSpiderKiller.rc 使用
 //
-#define IDC_MYICON                      2
-#define IDD_REDSPIDERKILLER_DIALOG      102
 #define IDS_APP_TITLE                   103
 #define IDI_REDSPIDERKILLER             107
 #define IDI_SMALL                       108
 #define IDC_REDSPIDERKILLER             109
-#define IDR_MAINFRAME                   128
 #define IDI_HIDE                        131
 #define IDI_SHOW                        132
-#define IDI_ICON1                       133
 #define IDI_EXIT                        133
 #define IDI_SECURE                      134
+#define IDI_KEY                         135
 #define IDC_STATIC                      -1
 
 // Next default values for new objects

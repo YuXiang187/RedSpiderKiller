@@ -2,6 +2,7 @@
 #include "RedSpiderKiller.h"
 
 #include "Killer.h"
+#include "KbdBridge.h"
 #include "Launcher.h"
 #include "SecureDesktop.h"
 
@@ -19,6 +20,7 @@ enum class ToolAction
 {
 	OpenChrome,
 	OpenGameViewer,
+	KeyboardBridge,
 	SecureDesktop,
 	ToggleAgent,
 	Exit,
@@ -76,6 +78,9 @@ void BuildToolbar(HINSTANCE hInstance)
 	{
 		toolbarButtons.push_back({ ToolAction::OpenGameViewer, Launcher::LoadIcon32(gameViewerPath), gameViewerPath });
 	}
+
+	toolbarButtons.push_back({ ToolAction::KeyboardBridge,
+		LoadIcon(hInstance, MAKEINTRESOURCE(IDI_KEY)), std::wstring() });
 
 	toolbarButtons.push_back({ ToolAction::SecureDesktop,
 		LoadIcon(hInstance, MAKEINTRESOURCE(IDI_SECURE)), std::wstring() });
@@ -270,6 +275,26 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 		}
 	}
 
+	// 键盘桥：先起线程备用，默认不装钩子（不做隐式全局读键）
+	KbdBridge::Start();
+
+	if (SecureDesktop::HasSwitch(L"--kbd-bridge"))
+	{
+		KbdBridge::SetEnabled(true);
+	}
+
+	// 只给自动化测试用：允许把注入的按键也当成物理键处理
+	if (SecureDesktop::HasSwitch(L"--kbd-allow-injected"))
+	{
+		KbdBridge::SetAllowInjected(true);
+	}
+
+	// 排查用：强制退回投消息模式（中文会失效），确认是不是注入那条路的问题
+	if (SecureDesktop::HasSwitch(L"--kbd-post"))
+	{
+		KbdBridge::SetForcePost(true);
+	}
+
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
 
@@ -433,6 +458,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				break;
 			}
 
+			case ToolAction::KeyboardBridge:
+			{
+				KbdBridge::SetEnabled(!KbdBridge::IsEnabled());
+				InvalidateRect(hWnd, nullptr, TRUE);
+				break;
+			}
+
 			case ToolAction::SecureDesktop:
 			{
 				std::wstring error;
@@ -500,11 +532,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				icon = killer->IsHide() ? iconShow : iconHide;
 			}
 
-			if (icon != nullptr)
+			if (icon == nullptr)
 			{
-				DrawIconEx(hdc, ICON_GAP, IconTop(static_cast<int>(i)), icon,
-					ICON_SIZE, ICON_SIZE, 0, nullptr, DI_NORMAL);
+				continue;
 			}
+
+			// 键盘桥是否开启，画成灰的/彩色的区分，一眼能看出状态
+			if (button.action == ToolAction::KeyboardBridge && !KbdBridge::IsEnabled())
+			{
+				DrawState(hdc, nullptr, nullptr, reinterpret_cast<LPARAM>(icon), 0,
+					ICON_GAP, IconTop(static_cast<int>(i)), ICON_SIZE, ICON_SIZE,
+					DST_ICON | DSS_DISABLED);
+				continue;
+			}
+
+			DrawIconEx(hdc, ICON_GAP, IconTop(static_cast<int>(i)), icon,
+				ICON_SIZE, ICON_SIZE, 0, nullptr, DI_NORMAL);
 		}
 
 		EndPaint(hWnd, &ps);
@@ -514,6 +557,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_DESTROY:
 	{
 		KillTimer(hWnd, 0);
+		KbdBridge::Stop();
 		PostQuitMessage(0);
 		break;
 	}

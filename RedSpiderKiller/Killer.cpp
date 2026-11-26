@@ -558,21 +558,6 @@ std::wstring Killer::GetAgentNames() const
 	return names;
 }
 
-const std::wstring& Killer::GetFilePath() const
-{
-	for (const auto& agent : m_agents)
-	{
-		if (!agent.imagePath.empty())
-		{
-			return agent.imagePath;
-		}
-	}
-
-	static const std::wstring empty;
-
-	return empty;
-}
-
 bool Killer::LoadAgents()
 {
 	m_agents.clear();

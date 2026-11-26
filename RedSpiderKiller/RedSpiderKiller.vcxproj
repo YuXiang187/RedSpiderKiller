@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="KbdBridge.h" />
     <ClInclude Include="Killer.h" />
     <ClInclude Include="Launcher.h" />
     <ClInclude Include="RedSpiderKiller.h" />
@@ -156,6 +157,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="KbdBridge.cpp" />
     <ClCompile Include="Killer.cpp" />
     <ClCompile Include="Launcher.cpp" />
     <ClCompile Include="RedSpiderKiller.cpp" />
@@ -173,6 +175,7 @@
   <ItemGroup>
     <Image Include="EXIT.ico" />
     <Image Include="HIDE.ico" />
+    <Image Include="KEY.ico" />
     <Image Include="RedSpiderKiller.ico" />
     <Image Include="SECURE.ico" />
     <Image Include="SHOW.ico" />
